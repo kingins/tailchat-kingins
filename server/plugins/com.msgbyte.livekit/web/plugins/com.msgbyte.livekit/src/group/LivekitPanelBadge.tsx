@@ -1,8 +1,39 @@
 import { useGlobalSocketEvent, useWatch } from '@capital/common';
-import { Avatar, Tooltip, UserAvatar, UserName } from '@capital/component';
+import { UserAvatar, UserName } from '@capital/component';
 import React, { useEffect, useState } from 'react';
 import { useRoomParticipants } from '../utils/useRoomParticipants';
 import _uniqBy from 'lodash/uniqBy';
+import styled from 'styled-components';
+
+const ParticipantList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 2px 0 2px 8px;
+`;
+
+const ParticipantRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 20px;
+  opacity: 0.8;
+  overflow: hidden;
+
+  & > span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+  }
+`;
+
+const MoreCount = styled.div`
+  font-size: 11px;
+  opacity: 0.55;
+  padding-left: 22px;
+`;
 
 export const LivekitPanelBadge: React.FC<{
   groupId: string;
@@ -64,23 +95,23 @@ export const LivekitPanelBadge: React.FC<{
     }
   );
 
+  if (displayParticipants.length === 0) {
+    return null;
+  }
+
+  const visibleList = displayParticipants.slice(0, 5);
+  const overflow = displayParticipants.length - visibleList.length;
+
   return (
-    <Avatar.Group
-      maxCount={4}
-      maxPopoverTrigger="click"
-      style={{ verticalAlign: 'middle' }}
-      maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
-    >
-      {displayParticipants.map((info, i) => (
-        <Tooltip
-          key={`${info.sid}#${i}`}
-          title={<UserName userId={info.identity} />}
-          placement="top"
-        >
-          <UserAvatar userId={info.identity} size={24} />
-        </Tooltip>
+    <ParticipantList>
+      {visibleList.map((info) => (
+        <ParticipantRow key={info.sid}>
+          <UserAvatar userId={info.identity} size={16} />
+          <UserName userId={info.identity} />
+        </ParticipantRow>
       ))}
-    </Avatar.Group>
+      {overflow > 0 && <MoreCount>+{overflow}</MoreCount>}
+    </ParticipantList>
   );
 });
 LivekitPanelBadge.displayName = 'LivekitPanelBadge';

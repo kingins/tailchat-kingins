@@ -93,4 +93,16 @@ export const Translate = {
     'zh-CN': '没有找到会议',
     'en-US': 'Not found meeting',
   }),
+  hqMode: localTrans({
+    'zh-CN': '高清模式',
+    'en-US': 'HD Mode',
+  }),
+  hqModeDesc: localTrans({
+    'zh-CN': '启用后提升视频与直播质量，需要更多带宽',
+    'en-US': 'Enable for better video and screen share quality, requires more bandwidth',
+  }),
+  volume: localTrans({
+    'zh-CN': '音量',
+    'en-US': 'Volume',
+  }),
 };

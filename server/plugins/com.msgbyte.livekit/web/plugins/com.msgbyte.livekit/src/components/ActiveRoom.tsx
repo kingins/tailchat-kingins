@@ -49,13 +49,17 @@ export const ActiveRoom: React.FC<ActiveRoomProps> = React.memo((props) => {
           hq === true
             ? [VideoPresets.h1080, VideoPresets.h720]
             : [VideoPresets.h720, VideoPresets.h540, VideoPresets.h216],
+        // Improved default screen share quality: h1080fps15 as base (was h720fps5)
         screenShareSimulcastLayers:
           hq === true
             ? [ScreenSharePresets.h1080fps15, ScreenSharePresets.h720fps5]
-            : [ScreenSharePresets.h720fps5, ScreenSharePresets.h360fps3],
+            : [ScreenSharePresets.h1080fps15, ScreenSharePresets.h720fps5],
       },
       audioCaptureDefaults: {
         deviceId: userChoices.audioDeviceId ?? undefined,
+        noiseSuppression: true,
+        echoCancellation: true,
+        autoGainControl: true,
       },
       adaptiveStream: { pixelDensity: 'screen' },
       dynacast: true,

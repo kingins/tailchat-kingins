@@ -60,6 +60,8 @@ export type PreJoinProps = Omit<
   micLabel?: string;
   camLabel?: string;
   userLabel?: string;
+  /** Called when HQ mode toggle changes */
+  onHqChange?: (hq: boolean) => void;
 };
 
 /**
@@ -88,10 +90,12 @@ export const PreJoinView: React.FC<PreJoinProps> = React.memo(
     joinLabel = Translate.joinLabel,
     micLabel = Translate.micLabel,
     camLabel = Translate.camLabel,
+    onHqChange,
     ...htmlProps
   }) => {
     const { nickname, avatar } = useCurrentUserInfo();
     const [userChoices, setUserChoices] = useState(DEFAULT_USER_CHOICES);
+    const [hqEnabled, setHqEnabled] = useState(false);
     const [videoEnabled, setVideoEnabled] = useState<boolean>(
       defaults.videoEnabled ?? DEFAULT_USER_CHOICES.videoEnabled
     );
@@ -249,6 +253,30 @@ export const PreJoinView: React.FC<PreJoinProps> = React.memo(
             </div>
           </div>
         </div>
+
+        <label
+          title={Translate.hqModeDesc}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            cursor: 'pointer',
+            fontSize: 13,
+            opacity: 0.85,
+            userSelect: 'none',
+          }}
+        >
+          <input
+            type="checkbox"
+            checked={hqEnabled}
+            onChange={(e) => {
+              setHqEnabled(e.target.checked);
+              onHqChange?.(e.target.checked);
+            }}
+            style={{ width: 14, height: 14, cursor: 'pointer' }}
+          />
+          {Translate.hqMode}
+        </label>
 
         <Button
           size="large"

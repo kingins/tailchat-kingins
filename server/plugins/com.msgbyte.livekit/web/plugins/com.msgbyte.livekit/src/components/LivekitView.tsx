@@ -53,6 +53,7 @@ export const PureLivekitView: React.FC<PureLivekitViewProps> = React.memo(
     const [preJoinChoices, setPreJoinChoices] = useState<
       LocalUserChoices | undefined
     >(undefined);
+    const [hqMode, setHqMode] = useState(false);
 
     const handleError = useEvent((err: Error) => {
       showErrorToasts('error while setting up prejoin');
@@ -82,6 +83,7 @@ export const PureLivekitView: React.FC<PureLivekitViewProps> = React.memo(
             userChoices={preJoinChoices}
             autoInviteIds={props.autoInviteIds}
             onLeave={handleLeave}
+            hq={hqMode}
           />
         ) : (
           <div
@@ -95,6 +97,7 @@ export const PureLivekitView: React.FC<PureLivekitViewProps> = React.memo(
                 audioEnabled: false,
               }}
               onSubmit={handleJoin}
+              onHqChange={setHqMode}
             />
           </div>
         )}
