@@ -1,0 +1,32 @@
+name: Server CI
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'server/**'
+      - 'packages/**'
+  pull_request:
+    paths:
+      - 'server/**'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:4.4
+        ports: ['27017:27017']
+      redis:
+        image: redis:6
+        ports: ['6379:6379']
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with: { node-version: 18.x }
+      - uses: pnpm/action-setup@v2
+        with: { version: 8.15.8 }
+      - run: pnpm install --frozen-lockfile
+      - run: cd server && pnpm test
+        env:
+          MONGO_URL: mongodb://localhost:27017/tailchat_test
+          REDIS_URL: redis://localhost:6379/
+          SECRET: test_secret_key
